@@ -8,11 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import jm.task.core.jdbc.util.Util;
 
 public class UserDaoJDBCImpl implements UserDao {
 
+    private static final Logger LOGGER = Logger.getLogger(UserDaoJDBCImpl.class.getName());
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (id BIGINT AUTO_INCREMENT PRIMARY KEY," +
             " name VARCHAR(255), lastname VARCHAR(255), age TINYINT)";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS users";
@@ -29,7 +31,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getMyConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_TABLE)) {
             preparedStatement.executeUpdate();
-            System.out.println("Users таблица создана");
+            LOGGER.info("Users таблица создана");
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -39,7 +41,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getMyConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DROP_TABLE)) {
             preparedStatement.executeUpdate();
-            System.out.println("Users таблица удалена");
+            LOGGER.info("Users таблица удалена");
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -52,7 +54,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
-            System.out.println("User с именем - " + name + " добавлен в базу данных");
+            LOGGER.info("User с именем - " + name + " добавлен в базу данных");
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +64,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getMyConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.setLong(1, id);
-            System.out.println("User с id - " + id + " удален из базы данных");
+            LOGGER.info("User с id - " + id + " удален из базы данных");
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -89,7 +91,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getMyConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CLEAN_TABLE)) {
             preparedStatement.executeUpdate();
-            System.out.println("Users таблица очищена");
+            LOGGER.info("Users таблица очищена");
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
